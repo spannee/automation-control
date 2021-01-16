@@ -1,0 +1,81 @@
+Input: The default state (when the program is first to run)
+Output:
+Floor 1
+MainCorridor 1 Light 1: OFF AirConditioner 1: ON 
+SubCorridor 1 Light 1: OFF AirConditioner 1: ON SubCorridor 2 Light 1: OFF AirConditioner 1: ON 
+
+
+Floor 2
+MainCorridor 1 Light 1: OFF AirConditioner 1: ON 
+SubCorridor 1 Light 1: OFF AirConditioner 1: ON SubCorridor 2 Light 1: OFF AirConditioner 1: ON 
+
+
+Input: Movement in Floor 5, Sub Corridor 2
+Time: - 2021-01-16T07:41:44.678Z
+Input: The default state (when the program is first to run)
+Input: Movement in Floor 1, Sub Corridor 2
+Time: - 2021-01-16T07:41:44.678Z
+Output:
+Floor 1
+MainCorridor 1 Light 1: OFF AirConditioner 1: ON 
+SubCorridor 1 Light 1: OFF AirConditioner 1: ON SubCorridor 2 Light 1: OFF AirConditioner 1: ON 
+
+
+Floor 2
+MainCorridor 1 Light 1: OFF AirConditioner 1: ON 
+SubCorridor 1 Light 1: OFF AirConditioner 1: ON SubCorridor 2 Light 1: OFF AirConditioner 1: ON 
+
+
+Input: No movement in Floor 1, Sub Corridor 2for a minute
+Time: - 2021-01-16T07:41:44.678Z
+Output:
+Floor 1
+MainCorridor 1 Light 1: OFF AirConditioner 1: ON 
+SubCorridor 1 Light 1: OFF AirConditioner 1: ON SubCorridor 2 Light 1: OFF AirConditioner 1: ON 
+
+
+Floor 2
+MainCorridor 1 Light 1: OFF AirConditioner 1: ON 
+SubCorridor 1 Light 1: OFF AirConditioner 1: ON SubCorridor 2 Light 1: OFF AirConditioner 1: ON 
+
+
+Input: The default state (when the program is first to run)
+Output:
+Floor 1
+MainCorridor 1 Light 1: OFF AirConditioner 1: ON 
+SubCorridor 1 Light 1: OFF AirConditioner 1: ON SubCorridor 2 Light 1: OFF AirConditioner 1: ON 
+
+
+Floor 2
+MainCorridor 1 Light 1: OFF AirConditioner 1: ON 
+SubCorridor 1 Light 1: OFF AirConditioner 1: ON SubCorridor 2 Light 1: OFF AirConditioner 1: ON 
+
+
+Input: Movement in Floor 1, Sub Corridor 2
+Time: - 2021-01-16T07:41:44.678Z
+Output:
+Floor 1
+MainCorridor 1 Light 1: OFF AirConditioner 1: ON 
+SubCorridor 1 Light 1: OFF AirConditioner 1: ON SubCorridor 2 Light 1: OFF AirConditioner 1: ON 
+
+
+Floor 2
+MainCorridor 1 Light 1: OFF AirConditioner 1: ON 
+SubCorridor 1 Light 1: OFF AirConditioner 1: ON SubCorridor 2 Light 1: OFF AirConditioner 1: ON 
+
+
+Input: The default state (when the program is first to run)
+Output:
+Floor 1
+MainCorridor 1 Light 1: OFF AirConditioner 1: ON 
+SubCorridor 1 Light 1: OFF AirConditioner 1: ON SubCorridor 2 Light 1: OFF AirConditioner 1: ON 
+
+
+Floor 2
+MainCorridor 1 Light 1: OFF AirConditioner 1: ON 
+SubCorridor 1 Light 1: OFF AirConditioner 1: ON SubCorridor 2 Light 1: OFF AirConditioner 1: ON 
+
+
+Input: Movement in Floor 1, Sub Corridor 4
+Time: - 2021-01-16T07:41:44.678Z
+Input: The default state (when the program is first to run)

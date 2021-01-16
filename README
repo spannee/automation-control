@@ -1,0 +1,30 @@
+========================================================AUTOMATION CONTROL========================================================
+
+This app takes real time into consideration. The description says the following "When a motion is detected in one
+of the sub corridors the corresponding lights need to be switched ON between 6 PM to 6 AM (Night Time slot)". Taking this
+into consideration, if the app is ran between 6 AM to 6 PM (Day Time slot), the lights in sub corridors
+will be switched  OFF.
+
+I have followed TDD and covered the major part of the code base. However I have not written test cases for all the classes
+due to time constraints.
+
+
+INSTRUCTIONS TO RUN
+Running the following commands will generate result.out containing the output
+1. To initialize the hotel (default state)
+./gradlew test --tests  com.sahaj.automationControl.executor.ControllerImplTest.testInitialStateOfHotel
+2. To test movement
+./gradlew test --tests  com.sahaj.automationControl.executor.ControllerImplTest.testMovement
+3. To test no movement
+./gradlew test --tests  com.sahaj.automationControl.executor.ControllerImplTest.testNoMovement
+
+I have added some more details in ControllerImplTest wrt providing inputs and writing more test cases if needed
+
+NOTE: Running all the units tests together will be successful, but the result.out generated will contain the output of
+all the unit tests. So run the commands above one by one and use result.out to check the corresponding output
+
+
+TOOLS USED
+1. Java
+2. Gradle
+3. JUnits for unit tests and also to test final output
