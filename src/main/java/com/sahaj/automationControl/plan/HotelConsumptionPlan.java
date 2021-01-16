@@ -35,8 +35,6 @@ public class HotelConsumptionPlan implements ConsumptionPlan {
     private static Instant previousMovementTime;
 
     public HotelConsumptionPlan() {
-        if (previousMovementTime == null) previousMovementTime = Instant.now();
-        logger.info("Time: - " + previousMovementTime);
         maxPowerUnits = new BigDecimal((mainCorridorCount * 15) + (subCorridorCount * 10));
     }
 
@@ -59,6 +57,7 @@ public class HotelConsumptionPlan implements ConsumptionPlan {
             //Switch off AirConditioners in other sub corridors
             switchDeviceStatus(floors, floor, corridor, Status.OFF, DeviceType.AIR_CONDITIONER);
         }
+        setPreviousMovementTime(Instant.now());
 
         if (hasTotalPowerBeenConsumed(floor)) {
             logger.error(ErrorMessages.TOTAL_POWER_CONSUMED.getErrorMessages());
@@ -86,6 +85,7 @@ public class HotelConsumptionPlan implements ConsumptionPlan {
             //Switch on AirConditioners in other sub corridors
             switchDeviceStatus(floors, floor, corridor, Status.ON, DeviceType.AIR_CONDITIONER);
         }
+        setPreviousMovementTime(Instant.now());
 
         if (hasTotalPowerBeenConsumed(floor)) {
             logger.error(ErrorMessages.TOTAL_POWER_CONSUMED.getErrorMessages());
@@ -162,6 +162,10 @@ public class HotelConsumptionPlan implements ConsumptionPlan {
             return Boolean.TRUE;
         }
         return Boolean.FALSE;
+    }
+
+    public static void setPreviousMovementTime(Instant previousMovementTime) {
+        HotelConsumptionPlan.previousMovementTime = previousMovementTime;
     }
 
     public static void setFloorCount(int floorCount) {

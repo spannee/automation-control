@@ -7,6 +7,7 @@ import com.sahaj.automationControl.plan.ConsumptionPlan;
 import com.sahaj.automationControl.plan.HotelConsumptionPlan;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.IntStream;
@@ -27,6 +28,7 @@ public class HotelMotionSensorImpl implements MotionSensor {
         HotelConsumptionPlan.setFloorCount(floorCount);
         HotelConsumptionPlan.setMainCorridorCount(mainCorridorCount);
         HotelConsumptionPlan.setSubCorridorCount(subCorridorCount);
+        HotelConsumptionPlan.setPreviousMovementTime(Instant.now());
 
         Map<Integer, BigDecimal> usedPowerUnits = new ConcurrentHashMap<>();
         IntStream.range(1, floorCount+1)
