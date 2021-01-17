@@ -23,16 +23,28 @@ public class HotelMotionSensorImpl implements MotionSensor {
 
     private static Map<Integer, Floor> floors;
 
+    private static int floorCount;
+
+    private static int mainCorridorCount;
+
+    private static int subCorridorCount;
+
+    private static BigDecimal maxPowerUnits;
+
+    private static Instant previousMovementTime;
+
     private HotelMotionSensorImpl(int floorCount, int mainCorridorCount, int subCorridorCount) {
+        this.floorCount = floorCount;
+        this.mainCorridorCount = mainCorridorCount;
+        this.subCorridorCount = subCorridorCount;
+        this.maxPowerUnits = HotelConsumptionPlan.getMaxPowerUnits(mainCorridorCount, subCorridorCount);
+        this.previousMovementTime = Instant.now();
+
         initializeHotel(floorCount, mainCorridorCount, subCorridorCount);
-        HotelConsumptionPlan.setFloorCount(floorCount);
-        HotelConsumptionPlan.setMainCorridorCount(mainCorridorCount);
-        HotelConsumptionPlan.setSubCorridorCount(subCorridorCount);
-        HotelConsumptionPlan.setPreviousMovementTime(Instant.now());
 
         Map<Integer, BigDecimal> usedPowerUnits = new ConcurrentHashMap<>();
         IntStream.range(1, floorCount+1)
-                 .forEach(i -> usedPowerUnits.put(i, new BigDecimal(0)));
+                 .forEach(i -> usedPowerUnits.put(i, BigDecimal.ZERO));
         HotelConsumptionPlan.setUsedPowerUnits(usedPowerUnits);
     }
 
@@ -102,6 +114,7 @@ public class HotelMotionSensorImpl implements MotionSensor {
     public void movement(int floor, int corridor, CorridorType corridorType, ConsumptionPlan consumptionPlan) throws AutomationControlException {
         consumptionPlan.movement(floors, floor, corridor, corridorType);
         printResultString(floors);
+        setPreviousMovementTime(Instant.now());
     }
 
     /**
@@ -117,6 +130,7 @@ public class HotelMotionSensorImpl implements MotionSensor {
     public void noMovement(int floor, int corridor, CorridorType corridorType, ConsumptionPlan consumptionPlan) throws AutomationControlException {
         consumptionPlan.noMovement(floors, floor, corridor, corridorType);
         printResultString(floors);
+        setPreviousMovementTime(Instant.now());
     }
 
     /**
@@ -147,6 +161,30 @@ public class HotelMotionSensorImpl implements MotionSensor {
 
     public static Map<Integer, Floor> getFloors() {
         return floors;
+    }
+
+    public static int getFloorCount() {
+        return floorCount;
+    }
+
+    public static int getMainCorridorCount() {
+        return mainCorridorCount;
+    }
+
+    public static int getSubCorridorCount() {
+        return subCorridorCount;
+    }
+
+    public static BigDecimal getMaxPowerUnits() {
+        return maxPowerUnits;
+    }
+
+    public static Instant getPreviousMovementTime() {
+        return previousMovementTime;
+    }
+
+    public static void setPreviousMovementTime(Instant previousMovementTime) {
+        HotelMotionSensorImpl.previousMovementTime = previousMovementTime;
     }
 
 }

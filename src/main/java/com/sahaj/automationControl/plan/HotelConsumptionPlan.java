@@ -7,6 +7,7 @@ import com.sahaj.automationControl.enums.DeviceType;
 import com.sahaj.automationControl.enums.ErrorMessages;
 import com.sahaj.automationControl.enums.Status;
 import com.sahaj.automationControl.exception.AutomationControlException;
+import com.sahaj.automationControl.service.HotelMotionSensorImpl;
 import com.sahaj.automationControl.utils.ValidationUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,20 +23,9 @@ public class HotelConsumptionPlan implements ConsumptionPlan {
 
     private static final Logger logger = LoggerFactory.getLogger("HotelConsumptionPlan");
 
-    private static BigDecimal maxPowerUnits;
-
     private static Map<Integer, BigDecimal> usedPowerUnits;
 
-    private static int floorCount;
-
-    private static int mainCorridorCount;
-
-    private static int subCorridorCount;
-
-    private static Instant previousMovementTime;
-
     public HotelConsumptionPlan() {
-        maxPowerUnits = new BigDecimal((mainCorridorCount * 15) + (subCorridorCount * 10));
     }
 
     /**
@@ -57,7 +47,6 @@ public class HotelConsumptionPlan implements ConsumptionPlan {
             //Switch off AirConditioners in other sub corridors
             switchDeviceStatus(floors, floor, corridor, Status.OFF, DeviceType.AIR_CONDITIONER);
         }
-        setPreviousMovementTime(Instant.now());
 
         if (hasTotalPowerBeenConsumed(floor)) {
             logger.error(ErrorMessages.TOTAL_POWER_CONSUMED.getErrorMessages());
@@ -85,7 +74,6 @@ public class HotelConsumptionPlan implements ConsumptionPlan {
             //Switch on AirConditioners in other sub corridors
             switchDeviceStatus(floors, floor, corridor, Status.ON, DeviceType.AIR_CONDITIONER);
         }
-        setPreviousMovementTime(Instant.now());
 
         if (hasTotalPowerBeenConsumed(floor)) {
             logger.error(ErrorMessages.TOTAL_POWER_CONSUMED.getErrorMessages());
@@ -144,7 +132,7 @@ public class HotelConsumptionPlan implements ConsumptionPlan {
         if (previousStatus == Status.OFF)
             return;
 
-        BigDecimal timeDifferenceInHours = getTimeDifferenceInHours(previousMovementTime, Instant.now());
+        BigDecimal timeDifferenceInHours = getTimeDifferenceInHours(HotelMotionSensorImpl.getPreviousMovementTime(), Instant.now());
         BigDecimal unitsConsumed = timeDifferenceInHours.multiply(BigDecimal.valueOf(device.deviceType().getUnits()));
         usedPowerUnits.computeIfPresent(floor, (k, v) -> v.add(unitsConsumed));
     }
@@ -156,48 +144,20 @@ public class HotelConsumptionPlan implements ConsumptionPlan {
      */
     @Override
     public boolean hasTotalPowerBeenConsumed(int floor) {
-        if (usedPowerUnits.get(floor).compareTo(maxPowerUnits) == 1) {
-            logger.info("Total Power Available for floor number " + floor + " - " + maxPowerUnits.toString());
+        if (usedPowerUnits.get(floor).compareTo(HotelMotionSensorImpl.getMaxPowerUnits()) == 1) {
+            logger.info("Total Power Available for floor number " + floor + " - " + HotelMotionSensorImpl.getMaxPowerUnits().toString());
             logger.info("Power Consumed So Far for floor number " + floor + " - " + usedPowerUnits.toString());
             return Boolean.TRUE;
         }
         return Boolean.FALSE;
     }
 
-    public static void setPreviousMovementTime(Instant previousMovementTime) {
-        HotelConsumptionPlan.previousMovementTime = previousMovementTime;
-    }
-
-    public static void setFloorCount(int floorCount) {
-        HotelConsumptionPlan.floorCount = floorCount;
-    }
-
-    public static void setMainCorridorCount(int mainCorridorCount) {
-        HotelConsumptionPlan.mainCorridorCount = mainCorridorCount;
-    }
-
-    public static void setSubCorridorCount(int subCorridorCount) {
-        HotelConsumptionPlan.subCorridorCount = subCorridorCount;
+    public static BigDecimal getMaxPowerUnits(int mainCorridorCount, int subCorridorCount) {
+        return new BigDecimal((mainCorridorCount * 15) + (subCorridorCount * 10));
     }
 
     public static void setUsedPowerUnits(Map<Integer, BigDecimal> usedPowerUnits) {
         HotelConsumptionPlan.usedPowerUnits = usedPowerUnits;
-    }
-
-    public static int getFloorCount() {
-        return floorCount;
-    }
-
-    public static int getMainCorridorCount() {
-        return mainCorridorCount;
-    }
-
-    public static int getSubCorridorCount() {
-        return subCorridorCount;
-    }
-
-    public static BigDecimal getMaxPowerUnits() {
-        return maxPowerUnits;
     }
 
     public static BigDecimal getUsedPowerUnits(int floor) {

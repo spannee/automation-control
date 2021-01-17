@@ -3,7 +3,7 @@ package com.sahaj.automationControl.utils;
 import com.sahaj.automationControl.enums.CorridorType;
 import com.sahaj.automationControl.enums.ErrorMessages;
 import com.sahaj.automationControl.exception.AutomationControlException;
-import com.sahaj.automationControl.plan.HotelConsumptionPlan;
+import com.sahaj.automationControl.service.HotelMotionSensorImpl;
 
 public class ValidationUtils {
 
@@ -15,11 +15,11 @@ public class ValidationUtils {
      * @throws AutomationControlException
      */
     public static void validateSensorData(int floor, int corridor, CorridorType corridorType) throws AutomationControlException {
-        if (floor > HotelConsumptionPlan.getFloorCount())
+        if (floor > HotelMotionSensorImpl.getFloorCount())
             throw new AutomationControlException(ErrorMessages.INVALID_FLOOR_NUMBER.getErrorMessages());
-        if (corridorType == CorridorType.MAIN_CORRIDOR && corridor > HotelConsumptionPlan.getMainCorridorCount())
+        if (corridorType == CorridorType.MAIN_CORRIDOR && corridor > HotelMotionSensorImpl.getMainCorridorCount())
             throw new AutomationControlException(ErrorMessages.INVALID_MC_ID.getErrorMessages());
-        if (corridorType == CorridorType.SUB_CORRIDOR && corridor > HotelConsumptionPlan.getSubCorridorCount())
+        if (corridorType == CorridorType.SUB_CORRIDOR && corridor > HotelMotionSensorImpl.getSubCorridorCount())
             throw new AutomationControlException(ErrorMessages.INVALID_SC_ID.getErrorMessages());
     }
 }

@@ -15,9 +15,7 @@ import org.junit.Test;
 
 import java.util.List;
 
-import static junit.framework.TestCase.assertEquals;
-import static junit.framework.TestCase.assertNotNull;
-import static junit.framework.TestCase.assertTrue;
+import static junit.framework.TestCase.*;
 
 /**
  * How input works in this APP
@@ -122,7 +120,7 @@ public class ControllerImplTest {
         }
 
         assertEquals(subCorridor2.getAirConditioner().getStatus(), Status.ON);
-        assertTrue(HotelConsumptionPlan.getMaxPowerUnits().compareTo(HotelConsumptionPlan.getUsedPowerUnits(1)) == 1);
+        assertTrue(HotelMotionSensorImpl.getMaxPowerUnits().compareTo(HotelConsumptionPlan.getUsedPowerUnits(1)) == 1);
 
         controller.destroyManagerInstance();
     }
@@ -151,7 +149,7 @@ public class ControllerImplTest {
         assertNotNull(subCorridor2);
         assertEquals(subCorridor1.getAirConditioner().getStatus(), Status.ON);
         assertEquals(subCorridor2.getElectricLight().getStatus(), Status.OFF);
-        assertTrue(HotelConsumptionPlan.getMaxPowerUnits().compareTo(HotelConsumptionPlan.getUsedPowerUnits(1)) == 1);
+        assertTrue(HotelMotionSensorImpl.getMaxPowerUnits().compareTo(HotelConsumptionPlan.getUsedPowerUnits(1)) == 1);
 
         controller.destroyManagerInstance();
     }
