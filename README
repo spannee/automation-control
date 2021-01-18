@@ -2,7 +2,7 @@
 
 This app takes real time into consideration. The description says the following "When a motion is detected in one
 of the sub corridors the corresponding lights need to be switched ON between 6 PM to 6 AM (Night Time slot)". Taking this
-into consideration, if the app is ran between 6 AM to 6 PM (Day Time slot), the lights in sub corridors
+into consideration, if the app is run between 6 AM to 6 PM (Day Time slot), the lights in sub corridors
 will be switched  OFF.
 
 I have followed TDD and covered the major part of the code base. However I have not written test cases for all the classes
