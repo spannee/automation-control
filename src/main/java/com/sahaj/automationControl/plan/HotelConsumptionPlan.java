@@ -23,11 +23,6 @@ public class HotelConsumptionPlan implements ConsumptionPlan {
 
     private static final Logger logger = LoggerFactory.getLogger("HotelConsumptionPlan");
 
-    private static Map<Integer, BigDecimal> usedPowerUnits;
-
-    public HotelConsumptionPlan() {
-    }
-
     /**
      * Consumption plan when there is movement in corridors
      * @param floors
@@ -134,7 +129,7 @@ public class HotelConsumptionPlan implements ConsumptionPlan {
 
         BigDecimal timeDifferenceInHours = getTimeDifferenceInHours(HotelMotionSensorImpl.getPreviousMovementTime(), Instant.now());
         BigDecimal unitsConsumed = timeDifferenceInHours.multiply(BigDecimal.valueOf(device.deviceType().getUnits()));
-        usedPowerUnits.computeIfPresent(floor, (k, v) -> v.add(unitsConsumed));
+        HotelMotionSensorImpl.getUsedPowerUnits().computeIfPresent(floor, (k, v) -> v.add(unitsConsumed));
     }
 
     /**
@@ -144,9 +139,9 @@ public class HotelConsumptionPlan implements ConsumptionPlan {
      */
     @Override
     public boolean hasTotalPowerBeenConsumed(int floor) {
-        if (usedPowerUnits.get(floor).compareTo(HotelMotionSensorImpl.getMaxPowerUnits()) == 1) {
+        if (HotelMotionSensorImpl.getUsedPowerUnits().get(floor).compareTo(HotelMotionSensorImpl.getMaxPowerUnits()) == 1) {
             logger.info("Total Power Available for floor number " + floor + " - " + HotelMotionSensorImpl.getMaxPowerUnits().toString());
-            logger.info("Power Consumed So Far for floor number " + floor + " - " + usedPowerUnits.toString());
+            logger.info("Power Consumed So Far for floor number " + floor + " - " + HotelMotionSensorImpl.getUsedPowerUnits().toString());
             return Boolean.TRUE;
         }
         return Boolean.FALSE;
@@ -154,14 +149,6 @@ public class HotelConsumptionPlan implements ConsumptionPlan {
 
     public static BigDecimal getMaxPowerUnits(int mainCorridorCount, int subCorridorCount) {
         return new BigDecimal((mainCorridorCount * 15) + (subCorridorCount * 10));
-    }
-
-    public static void setUsedPowerUnits(Map<Integer, BigDecimal> usedPowerUnits) {
-        HotelConsumptionPlan.usedPowerUnits = usedPowerUnits;
-    }
-
-    public static BigDecimal getUsedPowerUnits(int floor) {
-        return usedPowerUnits.get(floor);
     }
 
 

@@ -33,19 +33,41 @@ public class HotelMotionSensorImpl implements MotionSensor {
 
     private static Instant previousMovementTime;
 
-    private HotelMotionSensorImpl(int floorCount, int mainCorridorCount, int subCorridorCount) {
+    private static Map<Integer, BigDecimal> usedPowerUnits;
+
+    private ConsumptionPlan consumptionPlan;
+
+    private HotelMotionSensorImpl(int floorCount, int mainCorridorCount, int subCorridorCount, ConsumptionPlan consumptionPlan) {
+        initializeHotel(floorCount, mainCorridorCount, subCorridorCount);
+
         this.floorCount = floorCount;
         this.mainCorridorCount = mainCorridorCount;
         this.subCorridorCount = subCorridorCount;
         this.maxPowerUnits = HotelConsumptionPlan.getMaxPowerUnits(mainCorridorCount, subCorridorCount);
         this.previousMovementTime = Instant.now();
+        this.consumptionPlan = consumptionPlan;
 
-        initializeHotel(floorCount, mainCorridorCount, subCorridorCount);
-
-        Map<Integer, BigDecimal> usedPowerUnits = new ConcurrentHashMap<>();
+        usedPowerUnits = new ConcurrentHashMap<>();
         IntStream.range(1, floorCount+1)
                  .forEach(i -> usedPowerUnits.put(i, BigDecimal.ZERO));
-        HotelConsumptionPlan.setUsedPowerUnits(usedPowerUnits);
+    }
+
+    /**
+     * Singleton
+     * @param floorCount
+     * @param mainCorridorCount
+     * @param subCorridorCount
+     * @return
+     */
+    public static MotionSensor getInstance(int floorCount, int mainCorridorCount, int subCorridorCount, ConsumptionPlan consumptionPlan) {
+        if (instance == null) {
+            synchronized (HotelMotionSensorImpl.class) {
+                if (instance == null) {
+                    instance = new HotelMotionSensorImpl(floorCount, mainCorridorCount, subCorridorCount, consumptionPlan);
+                }
+            }
+        }
+        return instance;
     }
 
     /**
@@ -107,11 +129,10 @@ public class HotelMotionSensorImpl implements MotionSensor {
      * @param floor
      * @param corridor
      * @param corridorType
-     * @param consumptionPlan
      * @throws AutomationControlException
      */
     @Override
-    public void movement(int floor, int corridor, CorridorType corridorType, ConsumptionPlan consumptionPlan) throws AutomationControlException {
+    public void movement(int floor, int corridor, CorridorType corridorType) throws AutomationControlException {
         consumptionPlan.movement(floors, floor, corridor, corridorType);
         printResultString(floors);
         setPreviousMovementTime(Instant.now());
@@ -123,32 +144,13 @@ public class HotelMotionSensorImpl implements MotionSensor {
      * @param floor
      * @param corridor
      * @param corridorType
-     * @param consumptionPlan
      * @throws AutomationControlException
      */
     @Override
-    public void noMovement(int floor, int corridor, CorridorType corridorType, ConsumptionPlan consumptionPlan) throws AutomationControlException {
+    public void noMovement(int floor, int corridor, CorridorType corridorType) throws AutomationControlException {
         consumptionPlan.noMovement(floors, floor, corridor, corridorType);
         printResultString(floors);
         setPreviousMovementTime(Instant.now());
-    }
-
-    /**
-     * Singleton
-     * @param floorCount
-     * @param mainCorridorCount
-     * @param subCorridorCount
-     * @return
-     */
-    public static MotionSensor getInstance(int floorCount, int mainCorridorCount, int subCorridorCount) {
-        if (instance == null) {
-            synchronized (HotelMotionSensorImpl.class) {
-                if (instance == null) {
-                    instance = new HotelMotionSensorImpl(floorCount, mainCorridorCount, subCorridorCount);
-                }
-            }
-        }
-        return instance;
     }
 
     /**
@@ -158,6 +160,11 @@ public class HotelMotionSensorImpl implements MotionSensor {
     public void destroy() {
         instance = null;
     }
+
+    public static Map<Integer, BigDecimal> getUsedPowerUnits() {
+        return usedPowerUnits;
+    }
+
 
     public static Map<Integer, Floor> getFloors() {
         return floors;

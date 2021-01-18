@@ -2,7 +2,6 @@ package com.sahaj.automationControl.service;
 
 import com.sahaj.automationControl.enums.CorridorType;
 import com.sahaj.automationControl.exception.AutomationControlException;
-import com.sahaj.automationControl.plan.ConsumptionPlan;
 
 public interface MotionSensor {
 
@@ -12,10 +11,9 @@ public interface MotionSensor {
      * @param floor
      * @param corridor
      * @param corridorType
-     * @param consumptionPlan
      * @throws AutomationControlException
      */
-    void movement(int floor, int corridor, CorridorType corridorType, ConsumptionPlan consumptionPlan) throws AutomationControlException;
+    void movement(int floor, int corridor, CorridorType corridorType) throws AutomationControlException;
 
     /**
      * Controls devices and calculates power when there is no movement in the corridor
@@ -23,10 +21,9 @@ public interface MotionSensor {
      * @param floor
      * @param corridor
      * @param corridorType
-     * @param consumptionPlan
      * @throws AutomationControlException
      */
-    void noMovement(int floor, int corridor, CorridorType corridorType, ConsumptionPlan consumptionPlan) throws AutomationControlException;
+    void noMovement(int floor, int corridor, CorridorType corridorType) throws AutomationControlException;
 
     /**
      * Destroys the instance at the end

@@ -120,7 +120,7 @@ public class ControllerImplTest {
         }
 
         assertEquals(subCorridor2.getAirConditioner().getStatus(), Status.ON);
-        assertTrue(HotelMotionSensorImpl.getMaxPowerUnits().compareTo(HotelConsumptionPlan.getUsedPowerUnits(1)) == 1);
+        assertTrue(HotelMotionSensorImpl.getMaxPowerUnits().compareTo(HotelMotionSensorImpl.getUsedPowerUnits().get(1)) == 1);
 
         controller.destroyManagerInstance();
     }
@@ -149,7 +149,7 @@ public class ControllerImplTest {
         assertNotNull(subCorridor2);
         assertEquals(subCorridor1.getAirConditioner().getStatus(), Status.ON);
         assertEquals(subCorridor2.getElectricLight().getStatus(), Status.OFF);
-        assertTrue(HotelMotionSensorImpl.getMaxPowerUnits().compareTo(HotelConsumptionPlan.getUsedPowerUnits(1)) == 1);
+        assertTrue(HotelMotionSensorImpl.getMaxPowerUnits().compareTo(HotelMotionSensorImpl.getUsedPowerUnits().get(1)) == 1);
 
         controller.destroyManagerInstance();
     }
@@ -172,6 +172,21 @@ public class ControllerImplTest {
 
         controller.process(InputType.DEFAULT, new int[]{}, countParams, null);
         controller.process(InputType.MOVEMENT, sensorMovementParams, countParams, CorridorType.SUB_CORRIDOR);
+
+        controller.destroyManagerInstance();
+    }
+
+    @Test
+    public void testUsedPowerUnits() throws AutomationControlException, InterruptedException {
+        int[] countParams = new int[] {2, 1, 2};
+        int[] sensorMovementParams = new int[] {1, 2};
+
+        controller.process(InputType.DEFAULT, new int[]{}, countParams, null);
+        Thread.sleep(2000);
+        controller.process(InputType.MOVEMENT, sensorMovementParams, countParams, CorridorType.SUB_CORRIDOR);
+        Thread.sleep(2000);
+        controller.process(InputType.NO_MOVEMENT, sensorMovementParams, countParams, CorridorType.SUB_CORRIDOR);
+        Thread.sleep(2000);
 
         controller.destroyManagerInstance();
     }
