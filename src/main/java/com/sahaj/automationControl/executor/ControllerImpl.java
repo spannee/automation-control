@@ -46,7 +46,7 @@ public class ControllerImpl implements Controller {
                 automationManager.movement(sensorMovementParams[0], sensorMovementParams[1], corridorType);
                 break;
             case NO_MOVEMENT:
-                logger.info("Input: No movement in Floor " + sensorMovementParams[0] + ", Sub Corridor " + sensorMovementParams[1] + "for a minute");
+                logger.info("Input: No movement in Floor " + sensorMovementParams[0] + ", Sub Corridor " + sensorMovementParams[1] + " for a minute");
                 automationManager.noMovement(sensorMovementParams[0], sensorMovementParams[1], corridorType);
                 break;
             default:

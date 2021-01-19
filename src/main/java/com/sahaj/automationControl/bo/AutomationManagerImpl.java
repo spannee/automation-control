@@ -23,7 +23,7 @@ public class AutomationManagerImpl implements AutomationManager {
      */
     @Override
     public void defaultState(int floorCount, int mainCorridorCount, int subCorridorCount) {
-        motionSensor = HotelMotionSensorImpl.getInstance(floorCount, mainCorridorCount, subCorridorCount);
+        motionSensor = HotelMotionSensorImpl.getInstance(floorCount, mainCorridorCount, subCorridorCount, new HotelConsumptionPlan());
     }
 
     /**
@@ -40,7 +40,7 @@ public class AutomationManagerImpl implements AutomationManager {
             return;
         }
 
-        motionSensor.movement(floor, corridor, corridorType, new HotelConsumptionPlan());
+        motionSensor.movement(floor, corridor, corridorType);
     }
 
     /**
@@ -58,7 +58,7 @@ public class AutomationManagerImpl implements AutomationManager {
             return;
         }
 
-        motionSensor.noMovement(floor, corridor, corridorType, new HotelConsumptionPlan());
+        motionSensor.noMovement(floor, corridor, corridorType);
     }
 
     /**
