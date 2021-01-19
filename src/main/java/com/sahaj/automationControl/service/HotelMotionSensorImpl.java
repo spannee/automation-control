@@ -19,7 +19,7 @@ public class HotelMotionSensorImpl implements MotionSensor {
 
     private static final int DEFAULT_DEVICE_ID = 1;
 
-    private static MotionSensor instance;
+    private static volatile MotionSensor instance;
 
     private static Map<Integer, Floor> floors;
 
